@@ -37,8 +37,6 @@ type GPIO struct {
 	direction enums.GPIOMode
 }
 
-//
-
 func (gpio GPIO) Init() {
 	gpio.exportGpio()
 	gpio.setDirectionGpio()
