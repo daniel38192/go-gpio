@@ -37,8 +37,14 @@ type GPIO struct {
 	Direction enums.GPIOMode
 }
 
+func (gpio GPIO) Init() {
+	gpio.exportGpio()
+	gpio.setDirectionGpio()
+	gpio.setModeActiveLow()
+}
+
 // ExportGpio exports the GPIO to the sysfs. If the GPIO is already exported, it does nothing.
-func (gpio GPIO) ExportGpio() {
+func (gpio GPIO) exportGpio() {
 
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
 
@@ -66,7 +72,7 @@ func (gpio GPIO) UnexportGpio() {
 }
 
 // SetModeActiveLow sets the GPIO mode to active low. If ActiveLow is true, the GPIO is set to active low mode, otherwise it is set to normal mode.
-func (gpio GPIO) SetModeActiveLow() {
+func (gpio GPIO) setModeActiveLow() {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
 	var err error
 	if gpio.ActiveLow {
@@ -124,7 +130,7 @@ func (gpio GPIO) ReadGpioValue() bool {
 }
 
 // SetDirectionGpio sets the direction of the GPIO. It writes the Direction field value to the GPIO direction file.
-func (gpio GPIO) SetDirectionGpio() {
+func (gpio GPIO) setDirectionGpio() {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
 	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.Direction), 0666)
 
