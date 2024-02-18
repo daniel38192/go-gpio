@@ -14,10 +14,11 @@ package kernelutils
 import (
 	"container/list"
 	"fmt"
-	generalconstants "gpio/utils/constants/general"
 	"os"
 	"strconv"
 	"strings"
+
+	generalconstants "github.com/daniel38192/go-gpio/utils/constants/general"
 )
 
 // GetGpioBase returns the base address of the GPIOs in the system. It reads the base address from the sysfs interface.

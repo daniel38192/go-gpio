@@ -23,11 +23,12 @@ package linuxgpio
 
 import (
 	"fmt"
-	"gpio/enums"
-	generalconstants "gpio/utils/constants/general"
-	"gpio/utils/kernelutils"
 	"os"
 	"strings"
+
+	enums "github.com/daniel38192/go-gpio/enums"
+	generalconstants "github.com/daniel38192/go-gpio/utils/constants/general"
+	kernelutils "github.com/daniel38192/go-gpio/utils/kernelutils"
 )
 
 type GPIO struct {
@@ -126,10 +127,7 @@ func (gpio GPIO) ReadGpioValue() bool {
 // SetDirectionGpio sets the direction of the GPIO. It writes the Direction field value to the GPIO direction file.
 func (gpio GPIO) SetDirectionGpio() {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
-
-	var err error
-
-	err = os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.Direction), 0666)
+	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.Direction), 0666)
 
 	if err != nil {
 		fmt.Println("failed to open gpio direction file for writing")
