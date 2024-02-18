@@ -23,6 +23,6 @@
 // In the case of GPIOs, each GPIO pin is represented as a directory in the sysfs file system, and the properties of the GPIO pin can be read and written by reading and writing files in that directory.
 //
 // The gpio module provides a high-level interface to this sysfs interface, allowing the user to interact with GPIO pins using simple methods and properties, without needing to know the details of the sysfs interface.
-module gpio
+module github.com/daniel38192/go-gpio
 
 go 1.21.6
