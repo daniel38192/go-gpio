@@ -34,7 +34,6 @@ import (
 type GPIO struct {
 	Number    int
 	ActiveLow bool
-	Value     bool
 	Direction enums.GPIOMode
 }
 
@@ -84,12 +83,12 @@ func (gpio GPIO) SetModeActiveLow() {
 }
 
 // WriteGpioValue writes a value to the GPIO. If Value is true, it writes "1" to the GPIO value file, otherwise it writes "0".
-func (gpio GPIO) WriteGpioValue() {
+func (gpio GPIO) WriteGpioValue(gpioValue bool) {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
 
 	var err error
 
-	if gpio.Value {
+	if gpioValue {
 		err = os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/value", []byte("1"), 0666)
 	} else {
 		err = os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/value", []byte("0"), 0666)
