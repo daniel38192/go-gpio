@@ -19,7 +19,7 @@
 // WriteGpioValue: Writes a value to the GPIO. If Value is true, it writes "1" to the GPIO value file, otherwise it writes "0".
 // ReadGpioValue: Reads the current value of the GPIO. It reads the GPIO value file and returns true if the value is "1", false if the value is "0".
 // SetDirectionGpio: Sets the direction of the GPIO. It writes the Direction field value to the GPIO direction file.
-package gpio
+package linuxgpio
 
 import (
 	"fmt"
