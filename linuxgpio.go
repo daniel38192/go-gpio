@@ -37,6 +37,8 @@ type GPIO struct {
 	Direction enums.GPIOMode
 }
 
+// Init initializes the GPIO pin, exporting it, then setting the direction, and finaly set the mode.
+
 func (gpio GPIO) Init() {
 	gpio.exportGpio()
 	gpio.setDirectionGpio()
