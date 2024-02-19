@@ -1,8 +1,8 @@
-// Package enums defines the GPIOMode type, which is used to set the direction of a GPIO pin.
+// Package enums defines the GPIOMode type, which is used to set the Direction of a GPIO pin.
 //
 // Author: Luis D. Nuñez V. (daniel38192)
 //
-// The GPIOMode type is a string that can be either "in" or "out". These values represent the direction of a GPIO pin.
+// The GPIOMode type is a string that can be either "in" or "out". These values represent the Direction of a GPIO pin.
 // "in" means the GPIO pin is set to input mode, and "out" means the GPIO pin is set to output mode.
 //
 // The package provides constants for these two values, IN and OUT.

@@ -48,7 +48,7 @@ func GetGpioBase() int {
 	gpiobaseint, err1 := strconv.Atoi(strings.TrimSuffix(gpiobase, "\n"))
 
 	if err1 != nil {
-		fmt.Println("unsupported gpiobase number")
+		fmt.Println("unsupported gpiobase Number")
 		os.Exit(1)
 	}
 
