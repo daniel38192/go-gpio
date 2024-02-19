@@ -73,7 +73,7 @@ func (gpio GPIO) UnexportGpio() {
 
 }
 
-// SetModeActiveLow sets the GPIO mode to active low. If ActiveLow is true, the GPIO is set to active low mode, otherwise it is set to normal mode.
+// SetModeActiveLow sets the GPIO mode to active low. If activeLow is true, the GPIO is set to active low mode, otherwise it is set to normal mode.
 func (gpio GPIO) setModeActiveLow() {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
 	var err error
@@ -131,10 +131,10 @@ func (gpio GPIO) ReadGpioValue() bool {
 
 }
 
-// SetDirectionGpio sets the direction of the GPIO. It writes the Direction field value to the GPIO direction file.
+// SetDirectionGpio sets the direction of the GPIO. It writes the direction field value to the GPIO direction file.
 func (gpio GPIO) setDirectionGpio() {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
-	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/Direction", []byte(gpio.Direction), 0666)
+	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.Direction), 0666)
 
 	if err != nil {
 		fmt.Println("failed to open gpio Direction file for writing")
