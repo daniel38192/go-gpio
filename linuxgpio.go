@@ -137,7 +137,7 @@ func (gpio GPIO) setDirectionGpio() {
 	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.Direction), 0666)
 
 	if err != nil {
-		fmt.Println("failed to open gpio Direction file for writing")
+		fmt.Println("failed to open gpio direction file for writing")
 		os.Exit(1)
 
 	}
