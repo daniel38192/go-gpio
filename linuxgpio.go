@@ -32,9 +32,15 @@ import (
 )
 
 type GPIO struct {
-	Number    int
-	ActiveLow bool
-	Direction enums.GPIOMode
+	number    int
+	activeLow bool
+	direction enums.GPIOMode
+}
+
+func NewGpio(gpioNumber int, activeLow bool, direction enums.GPIOMode) GPIO {
+	gpio := GPIO{number: gpioNumber, activeLow: activeLow, direction: direction}
+	gpio.Init()
+	return gpio
 }
 
 // Init initializes the GPIO pin, exporting it, then setting the direction, and finaly set the mode.
@@ -48,7 +54,7 @@ func (gpio GPIO) Init() {
 // ExportGpio exports the GPIO to the sysfs. If the GPIO is already exported, it does nothing.
 func (gpio GPIO) exportGpio() {
 
-	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
+	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
 
 	if _, err := os.Stat(generalconstants.PathToGpioBase + "gpio" + sysGpio); err != nil {
 		if os.IsNotExist(err) {
@@ -63,7 +69,7 @@ func (gpio GPIO) exportGpio() {
 
 // UnexportGpio unexports the GPIO from the sysfs.
 func (gpio GPIO) UnexportGpio() {
-	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
+	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
 
 	err2 := os.WriteFile(generalconstants.PathToGpioBase+"unexport", []byte(sysGpio), 0666)
 	if err2 != nil {
@@ -75,9 +81,9 @@ func (gpio GPIO) UnexportGpio() {
 
 // SetModeActiveLow sets the GPIO mode to active low. If activeLow is true, the GPIO is set to active low mode, otherwise it is set to normal mode.
 func (gpio GPIO) setModeActiveLow() {
-	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
+	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
 	var err error
-	if gpio.ActiveLow {
+	if gpio.activeLow {
 		err = os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/active_low", []byte("1"), 0666)
 	} else {
 		err = os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/active_low", []byte("0"), 0666)
@@ -92,7 +98,13 @@ func (gpio GPIO) setModeActiveLow() {
 
 // WriteGpioValue writes a value to the GPIO. If Value is true, it writes "1" to the GPIO value file, otherwise it writes "0".
 func (gpio GPIO) WriteGpioValue(gpioValue bool) {
-	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
+
+	if gpio.direction == enums.IN {
+		fmt.Println("cannot write gpio value because gpio" + fmt.Sprint(gpio.number) + "is actually configured as an input")
+		os.Exit(1)
+	}
+
+	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
 
 	var err error
 
@@ -111,7 +123,7 @@ func (gpio GPIO) WriteGpioValue(gpioValue bool) {
 // ReadGpioValue reads the current value of the GPIO. It reads the GPIO value file and returns true if the value is "1", false if the value is "0".
 func (gpio GPIO) ReadGpioValue() bool {
 	var value bool
-	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
+	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
 	e, err := os.ReadFile(generalconstants.PathToGpioBase + "gpio" + sysGpio + "/value")
 	gpioStat := strings.TrimSuffix(string(e), "\n")
 	if err != nil {
@@ -133,8 +145,8 @@ func (gpio GPIO) ReadGpioValue() bool {
 
 // SetDirectionGpio sets the direction of the GPIO. It writes the direction field value to the GPIO direction file.
 func (gpio GPIO) setDirectionGpio() {
-	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.Number)
-	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.Direction), 0666)
+	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
+	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.direction), 0666)
 
 	if err != nil {
 		fmt.Println("failed to open gpio direction file for writing")
