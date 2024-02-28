@@ -18,7 +18,7 @@ import (
 	"strconv"
 	"strings"
 
-	generalconstants "github.com/daniel38192/go-gpio/utils/constants/general"
+	generalconstants "github.com/daniel38192/go-gpio/gpio/utils/constants/general"
 )
 
 // GetGpioBase returns the base address of the GPIOs in the system. It reads the base address from the sysfs interface.
@@ -38,8 +38,7 @@ func GetGpioBase() int {
 
 		gpiobase = string(i)
 		if err != nil {
-			fmt.Println("error at reading base file")
-			os.Exit(1)
+			panic(err)
 
 		}
 
@@ -48,8 +47,7 @@ func GetGpioBase() int {
 	gpiobaseint, err1 := strconv.Atoi(strings.TrimSuffix(gpiobase, "\n"))
 
 	if err1 != nil {
-		fmt.Println("unsupported gpiobase Number")
-		os.Exit(1)
+		panic(err1)
 	}
 
 	return gpiobaseint
@@ -64,14 +62,12 @@ func GpioChipSYSList() list.List {
 	sysdir, err := os.ReadDir(generalconstants.PathToGpioBase)
 
 	if err != nil {
-		fmt.Println("error at opening sys dir")
-		os.Exit(1)
-
+		panic(err)
 	}
 
 	for _, e := range sysdir {
 
-		if strings.Contains(e.Name(), "gpiochip") == true {
+		if strings.Contains(e.Name(), "gpiochip") {
 			sysgpiochipdir.PushFront(e.Name())
 		}
 

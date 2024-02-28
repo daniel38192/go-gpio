@@ -26,7 +26,7 @@ import (
 	"os"
 	"strings"
 
-	enums "github.com/daniel38192/go-gpio/enums"
+	enums "github.com/daniel38192/go-gpio/gpio/enums"
 	generalconstants "github.com/daniel38192/go-gpio/utils/constants/general"
 	kernelutils "github.com/daniel38192/go-gpio/utils/kernelutils"
 )
@@ -60,8 +60,7 @@ func (gpio GPIO) exportGpio() {
 		if os.IsNotExist(err) {
 			err2 := os.WriteFile(generalconstants.PathToGpioBase+"export", []byte(sysGpio), 0666)
 			if err2 != nil {
-				fmt.Println("failed to open gpio export file for writing")
-				os.Exit(1)
+				panic(err2)
 			}
 		}
 	}
@@ -70,11 +69,9 @@ func (gpio GPIO) exportGpio() {
 // UnexportGpio unexports the GPIO from the sysfs.
 func (gpio GPIO) UnexportGpio() {
 	var sysGpio = fmt.Sprint(kernelutils.GetGpioBase() + gpio.number)
-
-	err2 := os.WriteFile(generalconstants.PathToGpioBase+"unexport", []byte(sysGpio), 0666)
-	if err2 != nil {
-		fmt.Println("failed to open gpio unexport file for writing")
-		os.Exit(1)
+	err := os.WriteFile(generalconstants.PathToGpioBase+"unexport", []byte(sysGpio), 0666)
+	if err != nil {
+		panic(err)
 	}
 
 }
@@ -90,9 +87,7 @@ func (gpio GPIO) setModeActiveLow() {
 	}
 
 	if err != nil {
-		fmt.Println("failed to open gpio active_low file for writing")
-		os.Exit(1)
-
+		panic(err)
 	}
 }
 
@@ -115,8 +110,7 @@ func (gpio GPIO) WriteGpioValue(gpioValue bool) {
 	}
 
 	if err != nil {
-		fmt.Println("failed to open gpio value file for writing")
-		os.Exit(1)
+		panic(err)
 	}
 }
 
@@ -127,8 +121,7 @@ func (gpio GPIO) ReadGpioValue() bool {
 	e, err := os.ReadFile(generalconstants.PathToGpioBase + "gpio" + sysGpio + "/value")
 	gpioStat := strings.TrimSuffix(string(e), "\n")
 	if err != nil {
-		fmt.Println("failed to open gpio value file for reading")
-		os.Exit(1)
+		panic(err)
 	}
 
 	if gpioStat == "1" {
@@ -149,8 +142,6 @@ func (gpio GPIO) setDirectionGpio() {
 	err := os.WriteFile(generalconstants.PathToGpioBase+"gpio"+sysGpio+"/direction", []byte(gpio.direction), 0666)
 
 	if err != nil {
-		fmt.Println("failed to open gpio direction file for writing")
-		os.Exit(1)
-
+		panic(err)
 	}
 }
