@@ -27,8 +27,8 @@ import (
 	"strings"
 
 	enums "github.com/daniel38192/go-gpio/gpio/enums"
-	generalconstants "github.com/daniel38192/go-gpio/utils/constants/general"
-	kernelutils "github.com/daniel38192/go-gpio/utils/kernelutils"
+	generalconstants "github.com/daniel38192/go-gpio/gpio/utils/constants/general"
+	kernelutils "github.com/daniel38192/go-gpio/gpio/utils/kernelutils"
 )
 
 type GPIO struct {
