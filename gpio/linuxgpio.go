@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	enums "github.com/daniel38192/go-gpio/gpio/enums"
 	generalconstants "github.com/daniel38192/go-gpio/gpio/utils/constants/general"
@@ -46,7 +47,9 @@ func NewGpio(gpioNumber int, activeLow bool, direction enums.GPIOMode) GPIO {
 
 func (gpio GPIO) Init() {
 	gpio.exportGpio()
+	time.Sleep(time.Millisecond * 189)
 	gpio.setDirectionGpio()
+	time.Sleep(time.Millisecond * 189)
 	gpio.setModeActiveLow()
 }
 
